@@ -1,0 +1,199 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "ekonoo-operation-api",
+    "description": "",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/operations": {
+      "get": {
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "OperationsListDto",
+                  "type": "object",
+                  "properties": {
+                    "operations": {
+                      "type": "array",
+                      "items": {
+                        "title": "OperationItemDto",
+                        "type": "object",
+                        "properties": {
+                          "cashSource": {
+                            "type": "string",
+                            "enum": [
+                              "SEED_MATCHING",
+                              "VOLUNTARY_PAYMENT",
+                              "DEDUCTIBLE_VOLUNTARY_PAYMENT",
+                              "TIME_SAVING",
+                              "MANDATORY_CONTRIBUTION",
+                              "PROFIT_SHARING",
+                              "PARTICIPATION",
+                              "MATCHING_CONTRIBUTION"
+                            ]
+                          },
+                          "operationType": {
+                            "type": "string",
+                            "enum": [
+                              "SUBSCRIPTION",
+                              "PURCHASE"
+                            ]
+                          },
+                          "grossAmounts": {
+                            "type": "array",
+                            "items": {
+                              "title": "GrossAmount",
+                              "type": "object",
+                              "properties": {
+                                "productType": {
+                                  "type": "string",
+                                  "enum": [
+                                    "PEE",
+                                    "PER"
+                                  ]
+                                },
+                                "grossAmount": {
+                                  "type": "number"
+                                }
+                              },
+                              "required": [
+                                "productType",
+                                "grossAmount"
+                              ],
+                              "additionalProperties": false
+                            }
+                          },
+                          "executedDate": {
+                            "type": "number"
+                          },
+                          "fees": {
+                            "type": "number"
+                          },
+                          "taxes": {
+                            "type": "number"
+                          },
+                          "entrance_fees": {
+                            "type": "number"
+                          },
+                          "net_amount_invested": {
+                            "type": "number"
+                          }
+                        },
+                        "required": [
+                          "operationType",
+                          "grossAmounts",
+                          "executedDate",
+                          "fees",
+                          "taxes",
+                          "entrance_fees",
+                          "net_amount_invested"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "meta": {
+                      "title": "OperationsListDtoMeta",
+                      "type": "object",
+                      "properties": {
+                        "total": {
+                          "type": "number"
+                        },
+                        "page": {
+                          "type": "number"
+                        },
+                        "perPage": {
+                          "type": "number"
+                        },
+                        "nextPage": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "total",
+                        "page",
+                        "perPage"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "operations",
+                    "meta"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "description": "ListOperationLambda 200 Response"
+          }
+        },
+        "parameters": [
+          {
+            "in": "query",
+            "name": "dealId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "perPage",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "x-amazon-apigateway-integration": {
+          "uri": "",
+          "type": "aws_proxy",
+          "httpMethod": "POST",
+          "responses": {
+            "default": {
+              "statusCode": 200,
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Methods": "'*'",
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,Accept,Origin,Referer,User-Agent'"
+              },
+              "responseTemplates": {
+                "application/json": "{}\n"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "EkonooError": {
+        "title": "EkonooError",
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "additionalProperties": false
+      }
+    }
+  }
+}
